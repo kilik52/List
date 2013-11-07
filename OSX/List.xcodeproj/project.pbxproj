@@ -19,6 +19,7 @@
 		B03502B61828E54A00C83A9F /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B03502921828E54900C83A9F /* Cocoa.framework */; };
 		B03502BE1828E54A00C83A9F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B03502BC1828E54A00C83A9F /* InfoPlist.strings */; };
 		B03502C01828E54A00C83A9F /* ListTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B03502BF1828E54A00C83A9F /* ListTests.m */; };
+		B03E2E7E182BB70000512113 /* NSImage+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = B03E2E7D182BB70000512113 /* NSImage+Additions.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +53,8 @@
 		B03502BB1828E54A00C83A9F /* ListTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ListTests-Info.plist"; sourceTree = "<group>"; };
 		B03502BD1828E54A00C83A9F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		B03502BF1828E54A00C83A9F /* ListTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ListTests.m; sourceTree = "<group>"; };
+		B03E2E7C182BB70000512113 /* NSImage+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSImage+Additions.h"; sourceTree = "<group>"; };
+		B03E2E7D182BB70000512113 /* NSImage+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSImage+Additions.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,6 +120,7 @@
 		B03502981828E54900C83A9F /* List */ = {
 			isa = PBXGroup;
 			children = (
+				B03E2E7B182BB6E400512113 /* Helper */,
 				B03502A41828E54900C83A9F /* Document.h */,
 				B03502A51828E54900C83A9F /* Document.m */,
 				B03502A71828E54900C83A9F /* Document.xib */,
@@ -155,6 +159,15 @@
 				B03502BC1828E54A00C83A9F /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		B03E2E7B182BB6E400512113 /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				B03E2E7C182BB70000512113 /* NSImage+Additions.h */,
+				B03E2E7D182BB70000512113 /* NSImage+Additions.m */,
+			);
+			name = Helper;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -257,6 +270,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B03502A61828E54900C83A9F /* Document.m in Sources */,
+				B03E2E7E182BB70000512113 /* NSImage+Additions.m in Sources */,
 				B035029F1828E54900C83A9F /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -7,6 +7,11 @@
 //
 
 #import "Document.h"
+#import "NSImage+Additions.h"
+
+// More keys, and a version number, which are just used in Sketch's property-list-based file format.
+static NSString *DocumentVersionKey = @"version";
+static NSInteger DocumentCurrentVersion = 1;
 
 @interface Document ()
 @property (nonatomic,strong) NSMutableArray *items;
@@ -51,13 +56,21 @@
     // Insert code here to write your document to data of the specified type. If outError != NULL, ensure that you create and set an appropriate error when returning nil.
     // You can also choose to override -fileWrapperOfType:error:, -writeToURL:ofType:error:, or -writeToURL:ofType:forSaveOperation:originalContentsURL:error: instead.
     
-    NSError *error = nil;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:@{@"keys":self.itemKeys, @"items":self.items} options:NSJSONWritingPrettyPrinted error:&error];
-    if (error) {
-        NSLog(@"%@",[error localizedDescription]);
-    }
+    // Convert the contents of the document to a property list and then flatten the property list.
+    NSMutableDictionary *properties = [NSMutableDictionary dictionary];
     
-    return jsonData;
+    // 1. document version
+    [properties setObject:[NSNumber numberWithInteger:DocumentCurrentVersion] forKey:DocumentVersionKey];
+    
+    // 2. keys
+    [properties setObject:self.itemKeys forKey:@"keys"];
+    
+    // 3. items
+    [properties setObject:self.items forKey:@"items"];
+    
+    NSData *data = [NSPropertyListSerialization dataFromPropertyList:properties format:NSPropertyListBinaryFormat_v1_0 errorDescription:NULL];
+    
+    return data;
 }
 
 - (BOOL)readFromData:(NSData *)data ofType:(NSString *)typeName error:(NSError **)outError
@@ -65,23 +78,18 @@
     // Insert code here to read your document from the given data of the specified type. If outError != NULL, ensure that you create and set an appropriate error when returning NO.
     // You can also choose to override -readFromFileWrapper:ofType:error: or -readFromURL:ofType:error: instead.
     // If you override either of these, you should also override -isEntireFileLoaded to return NO if the contents are lazily loaded.
-    NSError *error = nil;
-    NSDictionary *importDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
-    if (error) {
-        NSLog(@"%@",[error localizedDescription]);
+    NSMutableDictionary *properties = [NSPropertyListSerialization propertyListFromData:data mutabilityOption:NSPropertyListMutableContainers format:NULL errorDescription:NULL];
+    if (properties) {
+        // 1. document version
+        NSNumber *docVersionNumber = [properties objectForKey:DocumentVersionKey];
+        NSAssert([docVersionNumber intValue] == 1, @"Only Support Doc Version 1");
+        
+        // 2. keys
+        self.itemKeys = [properties objectForKey:@"keys"];
+        
+        // 3. items
+        self.items = [properties objectForKey:@"items"];
     }
-    
-    NSArray *importKeys = [importDict objectForKey:@"keys"];
-    NSArray *importItems = [importDict objectForKey:@"items"];
-    
-    self.itemKeys = [[NSMutableArray alloc] initWithArray:importKeys];
-    
-    self.items = [[NSMutableArray alloc] init];
-    for (NSDictionary *importItem in importItems) {
-        NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithDictionary:importItem];
-        [self.items addObject:dict];
-    }
-    
     return YES;
 }
 
@@ -166,6 +174,16 @@
     return nil;
 }
 
+- (BOOL)checkKeyUniqueness:(NSString*)addingKey
+{
+    for (NSString *key in self.itemKeys) {
+        if ([addingKey isEqualToString:key]) {
+            return NO;
+        }
+    }
+    return YES;
+}
+
 #pragma mark - NSTableViewDelegate
 - (NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
     
@@ -177,7 +195,8 @@
     if( [tableColumn.identifier isEqualToString:@"ItemColumn"] )
     {
         NSMutableDictionary *item = [self.items objectAtIndex:row];
-        cellView.textField.stringValue = [item objectForKey:@"Name"];
+        NSString *firstKey = [self.itemKeys objectAtIndex:0];
+        cellView.textField.stringValue = [item objectForKey:firstKey];
         return cellView;
     }
     else if( [tableColumn.identifier isEqualToString:@"KeyColumn"] )
@@ -239,13 +258,22 @@
     if (item) {
         // change key
         if (textFieldType == 1) {
-            NSString *oldKeyName = [self.itemKeys objectAtIndex:row];
-            [self.itemKeys replaceObjectAtIndex:row withObject:textField.stringValue];
-            
-            for (NSMutableDictionary *dict in self.items) {
-                if ([dict objectForKey:oldKeyName]) {
-                    [dict setObject:[dict objectForKey:oldKeyName] forKey:textField.stringValue];
-                    [dict removeObjectForKey:oldKeyName];
+            NSString *newKey = textField.stringValue;
+            NSString *oldKey = [self.itemKeys objectAtIndex:row];
+            if (![oldKey isEqualToString:newKey]) {
+                if ([self checkKeyUniqueness:newKey]) {
+                    [self.itemKeys replaceObjectAtIndex:row withObject:textField.stringValue];
+                    
+                    for (NSMutableDictionary *dict in self.items) {
+                        if ([dict objectForKey:oldKey]) {
+                            [dict setObject:[dict objectForKey:oldKey] forKey:newKey];
+                            [dict removeObjectForKey:oldKey];
+                        }
+                    }
+                }
+                else {
+                    NSLog(@"Duplicated Key");
+                    [textField setStringValue:oldKey];
                 }
             }
         }
