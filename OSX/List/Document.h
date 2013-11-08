@@ -11,8 +11,8 @@
 @interface Document : NSDocument <NSTextFieldDelegate>
 - (IBAction)addItem:(id)sender;
 - (IBAction)removeItem:(id)sender;
-- (IBAction)addKeyValue:(id)sender;
-- (IBAction)removeKeyValue:(id)sender;
+- (IBAction)addKey:(id)sender;
+- (IBAction)removeKey:(id)sender;
 @property (weak) IBOutlet NSTableView *itemTableView;
 @property (weak) IBOutlet NSTableView *keyValueTableView;
 @end

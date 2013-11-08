@@ -225,7 +225,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="removeKeyValue:" target="-2" id="uLP-cB-H0Q"/>
+                            <action selector="removeKey:" target="-2" id="U2z-FC-3uU"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mxe-y1-qaG">
@@ -236,7 +236,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="addKeyValue:" target="-2" id="tsH-sM-bUE"/>
+                            <action selector="addKey:" target="-2" id="rjm-oq-u48"/>
                         </connections>
                     </button>
                 </subviews>

@@ -14,8 +14,9 @@ static NSString *DocumentVersionKey = @"version";
 static NSInteger DocumentCurrentVersion = 1;
 
 @interface Document ()
+// Model
 @property (nonatomic,strong) NSMutableArray *items;
-@property (nonatomic, strong) NSMutableArray *itemKeys;
+@property (nonatomic, strong) NSMutableArray *keys;
 @end
 
 @implementation Document
@@ -27,8 +28,8 @@ static NSInteger DocumentCurrentVersion = 1;
         // Add your subclass-specific initialization here.
         self.items = [[NSMutableArray alloc] init];
         
-        // a default key is 'Name'
-        self.itemKeys = [[NSMutableArray alloc] initWithObjects:@"Name", nil];
+        // the first default key is 'Name'
+        self.keys = [[NSMutableArray alloc] initWithObjects:@"Name", nil];
     }
     return self;
 }
@@ -51,6 +52,7 @@ static NSInteger DocumentCurrentVersion = 1;
     return YES;
 }
 
+#pragma mark - Save & Load Document
 - (NSData *)dataOfType:(NSString *)typeName error:(NSError **)outError
 {
     // Insert code here to write your document to data of the specified type. If outError != NULL, ensure that you create and set an appropriate error when returning nil.
@@ -63,7 +65,7 @@ static NSInteger DocumentCurrentVersion = 1;
     [properties setObject:[NSNumber numberWithInteger:DocumentCurrentVersion] forKey:DocumentVersionKey];
     
     // 2. keys
-    [properties setObject:self.itemKeys forKey:@"keys"];
+    [properties setObject:self.keys forKey:@"keys"];
     
     // 3. items
     [properties setObject:self.items forKey:@"items"];
@@ -85,7 +87,7 @@ static NSInteger DocumentCurrentVersion = 1;
         NSAssert([docVersionNumber intValue] == 1, @"Only Support Doc Version 1");
         
         // 2. keys
-        self.itemKeys = [properties objectForKey:@"keys"];
+        self.keys = [properties objectForKey:@"keys"];
         
         // 3. items
         self.items = [properties objectForKey:@"items"];
@@ -93,6 +95,18 @@ static NSInteger DocumentCurrentVersion = 1;
     return YES;
 }
 
+#pragma mark - Model Methods
+- (BOOL)checkKeyUniqueness:(NSString*)addingKey
+{
+    for (NSString *key in self.keys) {
+        if ([addingKey isEqualToString:key]) {
+            return NO;
+        }
+    }
+    return YES;
+}
+
+#pragma mark - View Methods
 - (IBAction)addItem:(id)sender {
     static int i = 1;
     NSString *newItemName = [NSString stringWithFormat:@"Item%02d",i++];
@@ -131,12 +145,12 @@ static NSInteger DocumentCurrentVersion = 1;
     }
 }
 
-- (IBAction)addKeyValue:(id)sender {
+- (IBAction)addKey:(id)sender {
     static int i=1;
-    [self.itemKeys addObject:[NSString stringWithFormat:@"Key%02d",i++]];
+    [self.keys addObject:[NSString stringWithFormat:@"Key%02d",i++]];
     
     // 3. Insert new row in the table view
-    NSInteger newRowIndex = self.itemKeys.count-1;
+    NSInteger newRowIndex = self.keys.count-1;
     [self.keyValueTableView beginUpdates];
     [self.keyValueTableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:newRowIndex] withAnimation:NSTableViewAnimationEffectGap];
     [self.keyValueTableView endUpdates];
@@ -146,26 +160,27 @@ static NSInteger DocumentCurrentVersion = 1;
     [self.keyValueTableView scrollRowToVisible:newRowIndex];
 }
 
-- (IBAction)removeKeyValue:(id)sender {
+- (IBAction)removeKey:(id)sender {
     return; // it's quite dangrous
     
-    if (self.keyValueTableView.selectedRow >= 0 && self.keyValueTableView.selectedRow < self.itemKeys.count) {
+    if (self.keyValueTableView.selectedRow >= 0 && self.keyValueTableView.selectedRow < self.keys.count) {
         NSInteger selectedRow = self.keyValueTableView.selectedRow;
-        [self.itemKeys removeObjectAtIndex:selectedRow];
+        [self.keys removeObjectAtIndex:selectedRow];
         // 3. Remove the selected row from the table view.
         [self.keyValueTableView beginUpdates];
         [self.keyValueTableView removeRowsAtIndexes:[NSIndexSet indexSetWithIndex:selectedRow] withAnimation:NSTableViewAnimationSlideRight];
         [self.keyValueTableView endUpdates];
         
         // 4. Select the new row
-        if (selectedRow >= self.itemKeys.count) {
-            selectedRow = self.itemKeys.count - 1;
+        if (selectedRow >= self.keys.count) {
+            selectedRow = self.keys.count - 1;
         }
         [self.keyValueTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:selectedRow] byExtendingSelection:NO];
         [self.keyValueTableView scrollRowToVisible:selectedRow];
     }
 }
 
+#pragma mark - NSTableViewDelegate
 - (NSMutableDictionary*)selectedItem
 {
     if (self.itemTableView.selectedRow >= 0 && self.itemTableView.selectedRow < self.items.count) {
@@ -174,17 +189,6 @@ static NSInteger DocumentCurrentVersion = 1;
     return nil;
 }
 
-- (BOOL)checkKeyUniqueness:(NSString*)addingKey
-{
-    for (NSString *key in self.itemKeys) {
-        if ([addingKey isEqualToString:key]) {
-            return NO;
-        }
-    }
-    return YES;
-}
-
-#pragma mark - NSTableViewDelegate
 - (NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
     
     // Get a new ViewCell
@@ -195,13 +199,13 @@ static NSInteger DocumentCurrentVersion = 1;
     if( [tableColumn.identifier isEqualToString:@"ItemColumn"] )
     {
         NSMutableDictionary *item = [self.items objectAtIndex:row];
-        NSString *firstKey = [self.itemKeys objectAtIndex:0];
+        NSString *firstKey = [self.keys objectAtIndex:0];
         cellView.textField.stringValue = [item objectForKey:firstKey];
         return cellView;
     }
     else if( [tableColumn.identifier isEqualToString:@"KeyColumn"] )
     {
-        NSString *key = [self.itemKeys objectAtIndex:row];
+        NSString *key = [self.keys objectAtIndex:row];
         cellView.textField.stringValue = key;
         
         return cellView;
@@ -209,7 +213,7 @@ static NSInteger DocumentCurrentVersion = 1;
     else if( [tableColumn.identifier isEqualToString:@"ValueColumn"] )
     {
         NSMutableDictionary *item = [self selectedItem];
-        NSString *key = [self.itemKeys objectAtIndex:row];
+        NSString *key = [self.keys objectAtIndex:row];
         NSString *obj = [item objectForKey:key];
         
         if (obj) {
@@ -233,7 +237,7 @@ static NSInteger DocumentCurrentVersion = 1;
         if ([self selectedItem] == nil) {
             return 0;
         }
-        return [self.itemKeys count];
+        return [self.keys count];
     }
     
     return 0;
@@ -259,10 +263,10 @@ static NSInteger DocumentCurrentVersion = 1;
         // change key
         if (textFieldType == 1) {
             NSString *newKey = textField.stringValue;
-            NSString *oldKey = [self.itemKeys objectAtIndex:row];
+            NSString *oldKey = [self.keys objectAtIndex:row];
             if (![oldKey isEqualToString:newKey]) {
                 if ([self checkKeyUniqueness:newKey]) {
-                    [self.itemKeys replaceObjectAtIndex:row withObject:textField.stringValue];
+                    [self.keys replaceObjectAtIndex:row withObject:textField.stringValue];
                     
                     for (NSMutableDictionary *dict in self.items) {
                         if ([dict objectForKey:oldKey]) {
