@@ -15,7 +15,7 @@ static NSInteger DocumentCurrentVersion = 1;
 
 @interface Document ()
 // Model
-@property (nonatomic,strong) NSMutableArray *items;
+@property (nonatomic,strong) NSMutableArray *items; // The value only contains two type: text & image list
 @property (nonatomic, strong) NSMutableArray *keys;
 @end
 
@@ -67,8 +67,30 @@ static NSInteger DocumentCurrentVersion = 1;
     // 2. keys
     [properties setObject:self.keys forKey:@"keys"];
     
-    // 3. items
-    [properties setObject:self.items forKey:@"items"];
+    // 3. items maybe contains image list, so we need to construct our own properties
+    NSMutableArray *itemProperties = [[NSMutableArray alloc] init];
+    for (NSMutableDictionary *item in self.items) {
+        NSMutableDictionary *itemProperty = [[NSMutableDictionary alloc] init];
+        for (NSString *key in [item allKeys]) {
+            id obj = [item objectForKey:key];
+            if ([obj isKindOfClass:[NSString class]]) {
+                // Text
+                [itemProperty setObject:obj forKey:key];
+            }
+            else if ([obj isKindOfClass:[NSArray class]]) {
+                // Image list
+                NSArray *objArray = (NSArray*)obj;
+                NSMutableArray *objProperties = [[NSMutableArray alloc] init];
+                for (NSImage *image in objArray) {
+                    NSData *imageData = [image PNGRepresentation];
+                    [objProperties addObject:imageData];
+                }
+                [itemProperty setObject:objProperties forKey:key];
+            }
+        }
+        [itemProperties addObject:itemProperty];
+    }
+    [properties setObject:itemProperties forKey:@"items"];
     
     NSData *data = [NSPropertyListSerialization dataFromPropertyList:properties format:NSPropertyListBinaryFormat_v1_0 errorDescription:NULL];
     
@@ -90,7 +112,30 @@ static NSInteger DocumentCurrentVersion = 1;
         self.keys = [properties objectForKey:@"keys"];
         
         // 3. items
-        self.items = [properties objectForKey:@"items"];
+        NSArray *importItems = [properties objectForKey:@"items"];
+        self.items = [[NSMutableArray alloc] init];
+        for (NSDictionary *importDict in importItems) {
+            NSMutableDictionary *item = [[NSMutableDictionary alloc] init];
+            for (NSString *key in [importDict allKeys]) {
+                id obj = [importDict objectForKey:key];
+                if ([obj isKindOfClass:[NSString class]]) {
+                    // Text
+                    [item setObject:obj forKey:key];
+                }
+                else if ([obj isKindOfClass:[NSArray class]]) {
+                    // Image list
+                    NSArray *objArray = (NSArray*)obj;
+                    NSMutableArray *imageList = [[NSMutableArray alloc] init];
+                    for (NSData *importImage in objArray) {
+                        NSImage *image = [[NSImage alloc] initWithData:importImage];
+                        [imageList addObject:image];
+                    }
+                    [item setObject:imageList forKey:key];
+                }
+            }
+            
+            [self.items addObject:item];
+        }
     }
     return YES;
 }
@@ -111,7 +156,8 @@ static NSInteger DocumentCurrentVersion = 1;
     static int i = 1;
     NSString *newItemName = [NSString stringWithFormat:@"Item%02d",i++];
     
-    NSMutableDictionary *itemDict = [[NSMutableDictionary alloc] initWithDictionary:@{@"Name":newItemName}];
+    NSString *firstKey = [self.keys objectAtIndex:0];
+    NSMutableDictionary *itemDict = [[NSMutableDictionary alloc] initWithDictionary:@{firstKey:newItemName}];
     [self.items addObject:itemDict];
     
     // 2. Insert the row at last
@@ -147,7 +193,8 @@ static NSInteger DocumentCurrentVersion = 1;
 
 - (IBAction)addKey:(id)sender {
     static int i=1;
-    [self.keys addObject:[NSString stringWithFormat:@"Key%02d",i++]];
+    NSString *key = [NSString stringWithFormat:@"Key%02d",i++];
+    [self.keys addObject:key];
     
     // 3. Insert new row in the table view
     NSInteger newRowIndex = self.keys.count-1;
@@ -288,7 +335,8 @@ static NSInteger DocumentCurrentVersion = 1;
             NSTextField *keyTextField = (NSTextField*)[keyView viewWithTag:1];
             [item setObject:textField.stringValue forKey:keyTextField.stringValue];
             
-            if ([keyTextField.stringValue isEqualToString:@"Name"]) {
+            NSString *firstKey = [self.keys objectAtIndex:0];
+            if ([keyTextField.stringValue isEqualToString:firstKey]) {
                 NSInteger oldSeletedRow = self.itemTableView.selectedRow;
                 [self.itemTableView reloadData];
                 [self.itemTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:oldSeletedRow] byExtendingSelection:NO];
