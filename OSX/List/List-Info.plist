@@ -25,6 +25,10 @@
 			</array>
 			<key>NSDocumentClass</key>
 			<string>Document</string>
+			<key>NSExportableTypes</key>
+			<array>
+				<string>com.adobe.pdf</string>
+			</array>
 		</dict>
 	</array>
 	<key>CFBundleExecutable</key>

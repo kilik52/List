@@ -140,6 +140,12 @@ static NSInteger DocumentCurrentVersion = 1;
     return YES;
 }
 
+#pragma mark - Print
+- (NSPrintOperation *)printOperationWithSettings:(NSDictionary *)printSettings error:(NSError **)outError
+{
+    return nil;
+}
+
 #pragma mark - Model Methods
 - (BOOL)checkKeyUniqueness:(NSString*)addingKey
 {
