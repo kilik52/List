@@ -14,6 +14,7 @@ void CancelPreviewGeneration(void *thisInterface, QLPreviewRequestRef preview);
 
 OSStatus GeneratePreviewForURL(void *thisInterface, QLPreviewRequestRef preview, CFURLRef url, CFStringRef contentTypeUTI, CFDictionaryRef options)
 {
+    /*
     // To complete your generator please implement the function GeneratePreviewForURL in GeneratePreviewForURL.c
     NSSize canvasSize = NSMakeSize(600, 800);
     
@@ -39,6 +40,12 @@ OSStatus GeneratePreviewForURL(void *thisInterface, QLPreviewRequestRef preview,
         
         CFRelease(cgContext);
     }
+    */
+    
+    NSString *_content = @"This is Preview";
+    
+    QLPreviewRequestSetDataRepresentation(preview,(__bridge CFDataRef)[_content dataUsingEncoding:NSUTF8StringEncoding],kUTTypePlainText,NULL);
+    
     return noErr;
 }
 

@@ -16,7 +16,21 @@
 		B03E2EEE182C797D00512113 /* GeneratePreviewForURL.m in Sources */ = {isa = PBXBuildFile; fileRef = B03E2EED182C797D00512113 /* GeneratePreviewForURL.m */; };
 		B03E2EF0182C797D00512113 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = B03E2EEF182C797D00512113 /* main.c */; };
 		B03E2EF8182C7CBB00512113 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B03E2EF7182C7CBB00512113 /* Cocoa.framework */; };
+		B0D42074182CB045007B12C7 /* QuickLookList.qlgenerator in CopyFiles */ = {isa = PBXBuildFile; fileRef = B03E2EDA182C797D00512113 /* QuickLookList.qlgenerator */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		B0D42073182CAEBF007B12C7 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "~/Library/QuickLook";
+			dstSubfolderSpec = 0;
+			files = (
+				B0D42074182CB045007B12C7 /* QuickLookList.qlgenerator in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		B03E2EDA182C797D00512113 /* QuickLookList.qlgenerator */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = QuickLookList.qlgenerator; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -86,7 +100,6 @@
 				B03E2EEF182C797D00512113 /* main.c */,
 				B03E2EE6182C797D00512113 /* Supporting Files */,
 			);
-			name = QuickLookList;
 			path = QuickLookList;
 			sourceTree = "<group>";
 		};
@@ -122,6 +135,7 @@
 				B03E2ED6182C797D00512113 /* Headers */,
 				B03E2ED7182C797D00512113 /* Resources */,
 				B03E2ED8182C797D00512113 /* Rez */,
+				B0D42073182CAEBF007B12C7 /* CopyFiles */,
 			);
 			buildRules = (
 			);
