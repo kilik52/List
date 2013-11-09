@@ -8,6 +8,7 @@
 
 #import "Document.h"
 #import "NSImage+Additions.h"
+#import "RTFExporter.h"
 
 // More keys, and a version number, which are just used in Sketch's property-list-based file format.
 static NSString *DocumentVersionKey = @"version";
@@ -55,53 +56,55 @@ static NSInteger DocumentCurrentVersion = 1;
 #pragma mark - Save & Load Document
 - (NSData *)dataOfType:(NSString *)typeName error:(NSError **)outError
 {
-    // Insert code here to write your document to data of the specified type. If outError != NULL, ensure that you create and set an appropriate error when returning nil.
-    // You can also choose to override -fileWrapperOfType:error:, -writeToURL:ofType:error:, or -writeToURL:ofType:forSaveOperation:originalContentsURL:error: instead.
-    
-    // Convert the contents of the document to a property list and then flatten the property list.
-    NSMutableDictionary *properties = [NSMutableDictionary dictionary];
-    
-    // 1. document version
-    [properties setObject:[NSNumber numberWithInteger:DocumentCurrentVersion] forKey:DocumentVersionKey];
-    
-    // 2. keys
-    [properties setObject:self.keys forKey:@"keys"];
-    
-    // 3. items maybe contains image list, so we need to construct our own properties
-    NSMutableArray *itemProperties = [[NSMutableArray alloc] init];
-    for (NSMutableDictionary *item in self.items) {
-        NSMutableDictionary *itemProperty = [[NSMutableDictionary alloc] init];
-        for (NSString *key in [item allKeys]) {
-            id obj = [item objectForKey:key];
-            if ([obj isKindOfClass:[NSString class]]) {
-                // Text
-                [itemProperty setObject:obj forKey:key];
-            }
-            else if ([obj isKindOfClass:[NSArray class]]) {
-                // Image list
-                NSArray *objArray = (NSArray*)obj;
-                NSMutableArray *objProperties = [[NSMutableArray alloc] init];
-                for (NSImage *image in objArray) {
-                    NSData *imageData = [image PNGRepresentation];
-                    [objProperties addObject:imageData];
-                }
-                [itemProperty setObject:objProperties forKey:key];
-            }
-        }
-        [itemProperties addObject:itemProperty];
+    if ([typeName isEqualToString:@"public.rtf"]) {
+        return [RTFExporter RTFFormat];
     }
-    [properties setObject:itemProperties forKey:@"items"];
-    
-    NSData *data = [NSPropertyListSerialization dataFromPropertyList:properties format:NSPropertyListBinaryFormat_v1_0 errorDescription:NULL];
-    
-    return data;
+    else if([typeName isEqualToString:@"com.adobe.pdf"]) {
+        return nil;
+    }
+    else {
+        // Convert the contents of the document to a property list and then flatten the property list.
+        NSMutableDictionary *properties = [NSMutableDictionary dictionary];
+        
+        // 1. document version
+        [properties setObject:[NSNumber numberWithInteger:DocumentCurrentVersion] forKey:DocumentVersionKey];
+        
+        // 2. keys
+        [properties setObject:self.keys forKey:@"keys"];
+        
+        // 3. items maybe contains image list, so we need to construct our own properties
+        NSMutableArray *itemProperties = [[NSMutableArray alloc] init];
+        for (NSMutableDictionary *item in self.items) {
+            NSMutableDictionary *itemProperty = [[NSMutableDictionary alloc] init];
+            for (NSString *key in [item allKeys]) {
+                id obj = [item objectForKey:key];
+                if ([obj isKindOfClass:[NSString class]]) {
+                    // Text
+                    [itemProperty setObject:obj forKey:key];
+                }
+                else if ([obj isKindOfClass:[NSArray class]]) {
+                    // Image list
+                    NSArray *objArray = (NSArray*)obj;
+                    NSMutableArray *objProperties = [[NSMutableArray alloc] init];
+                    for (NSImage *image in objArray) {
+                        NSData *imageData = [image PNGRepresentation];
+                        [objProperties addObject:imageData];
+                    }
+                    [itemProperty setObject:objProperties forKey:key];
+                }
+            }
+            [itemProperties addObject:itemProperty];
+        }
+        [properties setObject:itemProperties forKey:@"items"];
+        
+        NSData *data = [NSPropertyListSerialization dataFromPropertyList:properties format:NSPropertyListBinaryFormat_v1_0 errorDescription:NULL];
+        
+        return data;
+    }
 }
 
 - (BOOL)readFromData:(NSData *)data ofType:(NSString *)typeName error:(NSError **)outError
 {
-    // Insert code here to read your document from the given data of the specified type. If outError != NULL, ensure that you create and set an appropriate error when returning NO.
-    // You can also choose to override -readFromFileWrapper:ofType:error: or -readFromURL:ofType:error: instead.
-    // If you override either of these, you should also override -isEntireFileLoaded to return NO if the contents are lazily loaded.
     NSMutableDictionary *properties = [NSPropertyListSerialization propertyListFromData:data mutabilityOption:NSPropertyListMutableContainers format:NULL errorDescription:NULL];
     if (properties) {
         // 1. document version
@@ -143,6 +146,8 @@ static NSInteger DocumentCurrentVersion = 1;
 #pragma mark - Print
 - (NSPrintOperation *)printOperationWithSettings:(NSDictionary *)printSettings error:(NSError **)outError
 {
+    NSAlert *alert = [NSAlert alertWithMessageText:@"Print Not Implemented!" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"Contact kilik52@outlook.com if your want this function."];
+    [alert beginSheetModalForWindow:nil modalDelegate:nil didEndSelector:nil contextInfo:nil];
     return nil;
 }
 

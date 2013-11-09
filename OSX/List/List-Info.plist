@@ -12,7 +12,7 @@
 			<key>CFBundleTypeIconFile</key>
 			<string></string>
 			<key>CFBundleTypeName</key>
-			<string></string>
+			<string>List Document</string>
 			<key>CFBundleTypeOSTypes</key>
 			<array>
 				<string>????</string>
@@ -27,7 +27,9 @@
 			<string>Document</string>
 			<key>NSExportableTypes</key>
 			<array>
+				<string>public.rtf</string>
 				<string>com.adobe.pdf</string>
+				<string>com.apple.rtfd</string>
 			</array>
 		</dict>
 	</array>
@@ -68,6 +70,8 @@
 			</array>
 			<key>UTTypeDescription</key>
 			<string>Mirroon List Document</string>
+			<key>UTTypeIconFile</key>
+			<string>ListDoc</string>
 			<key>UTTypeIdentifier</key>
 			<string>com.mirroon.list</string>
 			<key>UTTypeReferenceURL</key>

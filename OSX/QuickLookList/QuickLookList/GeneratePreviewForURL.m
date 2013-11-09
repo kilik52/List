@@ -14,38 +14,68 @@ void CancelPreviewGeneration(void *thisInterface, QLPreviewRequestRef preview);
 
 OSStatus GeneratePreviewForURL(void *thisInterface, QLPreviewRequestRef preview, CFURLRef url, CFStringRef contentTypeUTI, CFDictionaryRef options)
 {
-    /*
-    // To complete your generator please implement the function GeneratePreviewForURL in GeneratePreviewForURL.c
-    NSSize canvasSize = NSMakeSize(600, 800);
+    CGRect rect = CGRectMake(0, 0, 600, 800);
     
-    // Preview will be drawn in a vectorized context
-	// Here we create a graphics context to draw the Quick Look Preview in
-    CGContextRef cgContext = QLPreviewRequestCreateContext(preview, *(CGSize *)&canvasSize, false, NULL);
-    if(cgContext) {
-        NSGraphicsContext* context = [NSGraphicsContext graphicsContextWithGraphicsPort:(void *)cgContext flipped:YES];
-        if(context) {
-			//These two lines of code are just good safe programming...
-			[NSGraphicsContext saveGraphicsState];
-			[NSGraphicsContext setCurrentContext:context];
-			
-            // Draw here
+    NSMutableDictionary* auxInfo = [NSMutableDictionary dictionary];
+	[ auxInfo setObject:@"Zhu Xi Chi (kilik52@outlook.com)" forKey: (id)kCGPDFContextAuthor ];
+	[ auxInfo setObject:@"xmslook" forKey: (id)kCGPDFContextCreator ];
+    
+    CFStringRef urlStr = CFURLGetString(url);
+	CFRetain(urlStr);
+	
+	[ auxInfo setObject:(__bridge NSString*)urlStr forKey: (id)kCGPDFContextTitle ];
+    
+    
+    CGContextRef pdfContext = QLPreviewRequestCreatePDFContext(preview, &rect, (__bridge CFDictionaryRef)auxInfo, NULL);
+    if (pdfContext) {
+        CGPDFContextBeginPage(pdfContext, NULL);
+       
+        NSGraphicsContext* context = [NSGraphicsContext graphicsContextWithGraphicsPort:(void *)pdfContext flipped:YES];
+        
+        if (context) {
+            [NSGraphicsContext saveGraphicsState];
+            [NSGraphicsContext setCurrentContext:context];
+            
+            NSAffineTransform* xform = [NSAffineTransform transform];
+            [xform translateXBy:0.0 yBy:800];
+            [xform scaleXBy:1.0 yBy:-1.0];
+            [xform concat];
+            
+            [context saveGraphicsState];
+            NSRect nameRect = NSMakeRect(10.0,
+                                         10.0,
+                                         600,
+                                         80);
+            NSMutableAttributedString* nameDrawable = [[NSMutableAttributedString alloc]
+                                                       initWithString: @"Title"];
+            
+            NSRange range = NSMakeRange(0,[nameDrawable length]);
+            [nameDrawable addAttribute: NSFontAttributeName
+                                 value: [NSFont userFontOfSize:20.0]
+                                 range: range];
+            [nameDrawable applyFontTraits:NSBoldFontMask
+                                    range:NSMakeRange(0, [nameDrawable length])];
+            [nameDrawable addAttribute: NSForegroundColorAttributeName
+                                 value: [NSColor blackColor]
+                                 range:range];
+            
+            [nameDrawable drawInRect: nameRect];
+            [context restoreGraphicsState];
             
             
-			//This line sets the context back to what it was when we're done
-			[NSGraphicsContext restoreGraphicsState];
+            [NSGraphicsContext restoreGraphicsState];
         }
         
-		// When we are done with our drawing code QLPreviewRequestFlushContext() is called to flush the context
-        QLPreviewRequestFlushContext(preview, cgContext);
-        
-        CFRelease(cgContext);
+        CGPDFContextEndPage(pdfContext);
+        CGPDFContextBeginPage(pdfContext, NULL);
+        CGPDFContextEndPage(pdfContext);
+        CGPDFContextBeginPage(pdfContext, NULL);
+        CGPDFContextEndPage(pdfContext);
+        QLPreviewRequestFlushContext(preview, pdfContext);
     }
-    */
-    
-    NSString *_content = @"This is Preview";
-    
-    QLPreviewRequestSetDataRepresentation(preview,(__bridge CFDataRef)[_content dataUsingEncoding:NSUTF8StringEncoding],kUTTypePlainText,NULL);
-    
+    CFRelease(pdfContext);
+    CFRelease(urlStr);
+
     return noErr;
 }
 

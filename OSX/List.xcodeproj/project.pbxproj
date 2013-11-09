@@ -20,6 +20,8 @@
 		B03502BE1828E54A00C83A9F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B03502BC1828E54A00C83A9F /* InfoPlist.strings */; };
 		B03502C01828E54A00C83A9F /* ListTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B03502BF1828E54A00C83A9F /* ListTests.m */; };
 		B03E2E7E182BB70000512113 /* NSImage+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = B03E2E7D182BB70000512113 /* NSImage+Additions.m */; };
+		B05FFF6E182D353B00E9E438 /* ListDoc.icns in Resources */ = {isa = PBXBuildFile; fileRef = B05FFF6D182D353B00E9E438 /* ListDoc.icns */; };
+		B0785450182E08E1004F370E /* RTFExporter.m in Sources */ = {isa = PBXBuildFile; fileRef = B078544F182E08E1004F370E /* RTFExporter.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +57,9 @@
 		B03502BF1828E54A00C83A9F /* ListTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ListTests.m; sourceTree = "<group>"; };
 		B03E2E7C182BB70000512113 /* NSImage+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSImage+Additions.h"; sourceTree = "<group>"; };
 		B03E2E7D182BB70000512113 /* NSImage+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSImage+Additions.m"; sourceTree = "<group>"; };
+		B05FFF6D182D353B00E9E438 /* ListDoc.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = ListDoc.icns; sourceTree = "<group>"; };
+		B078544E182E08E1004F370E /* RTFExporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RTFExporter.h; sourceTree = "<group>"; };
+		B078544F182E08E1004F370E /* RTFExporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RTFExporter.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +125,7 @@
 		B03502981828E54900C83A9F /* List */ = {
 			isa = PBXGroup;
 			children = (
+				B05FFF6C182D353B00E9E438 /* Images */,
 				B03E2E7B182BB6E400512113 /* Helper */,
 				B03502A41828E54900C83A9F /* Document.h */,
 				B03502A51828E54900C83A9F /* Document.m */,
@@ -166,8 +172,18 @@
 			children = (
 				B03E2E7C182BB70000512113 /* NSImage+Additions.h */,
 				B03E2E7D182BB70000512113 /* NSImage+Additions.m */,
+				B078544E182E08E1004F370E /* RTFExporter.h */,
+				B078544F182E08E1004F370E /* RTFExporter.m */,
 			);
 			name = Helper;
+			sourceTree = "<group>";
+		};
+		B05FFF6C182D353B00E9E438 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				B05FFF6D182D353B00E9E438 /* ListDoc.icns */,
+			);
+			path = Images;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -249,6 +265,7 @@
 				B03502A91828E54900C83A9F /* Document.xib in Resources */,
 				B03502AE1828E54A00C83A9F /* Images.xcassets in Resources */,
 				B035029D1828E54900C83A9F /* InfoPlist.strings in Resources */,
+				B05FFF6E182D353B00E9E438 /* ListDoc.icns in Resources */,
 				B03502A31828E54900C83A9F /* Credits.rtf in Resources */,
 				B03502AC1828E54A00C83A9F /* MainMenu.xib in Resources */,
 			);
@@ -270,6 +287,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B03502A61828E54900C83A9F /* Document.m in Sources */,
+				B0785450182E08E1004F370E /* RTFExporter.m in Sources */,
 				B03E2E7E182BB70000512113 /* NSImage+Additions.m in Sources */,
 				B035029F1828E54900C83A9F /* main.m in Sources */,
 			);
