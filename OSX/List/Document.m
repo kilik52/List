@@ -182,6 +182,8 @@ static NSInteger DocumentCurrentVersion = 1;
     // 4. Select the new bug and scroll to make sure it's visible
     [self.itemTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:newRowIndex] byExtendingSelection:NO];
     [self.itemTableView scrollRowToVisible:newRowIndex];
+    
+    [self updateChangeCount:NSChangeDone];
 }
 
 - (IBAction)removeItem:(id)sender {
@@ -199,6 +201,8 @@ static NSInteger DocumentCurrentVersion = 1;
         }
         [self.itemTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:selectedRow] byExtendingSelection:NO];
         [self.itemTableView scrollRowToVisible:selectedRow];
+        
+        [self updateChangeCount:NSChangeDone];
     }
 }
 
@@ -216,6 +220,8 @@ static NSInteger DocumentCurrentVersion = 1;
     // 4. Select the new bug and scroll to make sure it's visible
     [self.keyValueTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:newRowIndex] byExtendingSelection:NO];
     [self.keyValueTableView scrollRowToVisible:newRowIndex];
+    
+    [self updateChangeCount:NSChangeDone];
 }
 
 - (IBAction)removeKey:(id)sender {
@@ -235,6 +241,8 @@ static NSInteger DocumentCurrentVersion = 1;
         }
         [self.keyValueTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:selectedRow] byExtendingSelection:NO];
         [self.keyValueTableView scrollRowToVisible:selectedRow];
+        
+        [self updateChangeCount:NSChangeDone];
     }
 }
 
@@ -332,6 +340,8 @@ static NSInteger DocumentCurrentVersion = 1;
                             [dict removeObjectForKey:oldKey];
                         }
                     }
+                    
+                    [self updateChangeCount:NSChangeDone];
                 }
                 else {
                     NSLog(@"Duplicated Key");
@@ -352,6 +362,8 @@ static NSInteger DocumentCurrentVersion = 1;
                 [self.itemTableView reloadData];
                 [self.itemTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:oldSeletedRow] byExtendingSelection:NO];
             }
+            
+            [self updateChangeCount:NSChangeDone];
         }
     }
 }
