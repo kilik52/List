@@ -20,8 +20,12 @@
 		B03502BE1828E54A00C83A9F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B03502BC1828E54A00C83A9F /* InfoPlist.strings */; };
 		B03502C01828E54A00C83A9F /* ListTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B03502BF1828E54A00C83A9F /* ListTests.m */; };
 		B03E2E7E182BB70000512113 /* NSImage+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = B03E2E7D182BB70000512113 /* NSImage+Additions.m */; };
+		B0595185184B0F9800BF03A5 /* MyTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B0595184184B0F9800BF03A5 /* MyTextFieldCell.m */; };
+		B059518E184B148700BF03A5 /* MyTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = B059518D184B148700BF03A5 /* MyTableView.m */; };
+		B0595190184B3F8F00BF03A5 /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = B059518F184B3F8F00BF03A5 /* icon.icns */; };
 		B05FFF6E182D353B00E9E438 /* ListDoc.icns in Resources */ = {isa = PBXBuildFile; fileRef = B05FFF6D182D353B00E9E438 /* ListDoc.icns */; };
 		B0785450182E08E1004F370E /* RTFExporter.m in Sources */ = {isa = PBXBuildFile; fileRef = B078544F182E08E1004F370E /* RTFExporter.m */; };
+		B0E42D4E183305DF00DFDD19 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0E42D4D183305DF00DFDD19 /* IOKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,9 +61,15 @@
 		B03502BF1828E54A00C83A9F /* ListTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ListTests.m; sourceTree = "<group>"; };
 		B03E2E7C182BB70000512113 /* NSImage+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSImage+Additions.h"; sourceTree = "<group>"; };
 		B03E2E7D182BB70000512113 /* NSImage+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSImage+Additions.m"; sourceTree = "<group>"; };
+		B0595183184B0F9800BF03A5 /* MyTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyTextFieldCell.h; sourceTree = "<group>"; };
+		B0595184184B0F9800BF03A5 /* MyTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyTextFieldCell.m; sourceTree = "<group>"; };
+		B059518C184B148700BF03A5 /* MyTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyTableView.h; sourceTree = "<group>"; };
+		B059518D184B148700BF03A5 /* MyTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyTableView.m; sourceTree = "<group>"; };
+		B059518F184B3F8F00BF03A5 /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = icon.icns; sourceTree = "<group>"; };
 		B05FFF6D182D353B00E9E438 /* ListDoc.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = ListDoc.icns; sourceTree = "<group>"; };
 		B078544E182E08E1004F370E /* RTFExporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RTFExporter.h; sourceTree = "<group>"; };
 		B078544F182E08E1004F370E /* RTFExporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RTFExporter.m; sourceTree = "<group>"; };
+		B0E42D4D183305DF00DFDD19 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +77,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B0E42D4E183305DF00DFDD19 /* IOKit.framework in Frameworks */,
 				B03502931828E54900C83A9F /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -105,6 +116,7 @@
 		B03502911828E54900C83A9F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B0E42D4D183305DF00DFDD19 /* IOKit.framework */,
 				B03502921828E54900C83A9F /* Cocoa.framework */,
 				B03502B41828E54A00C83A9F /* XCTest.framework */,
 				B03502941828E54900C83A9F /* Other Frameworks */,
@@ -174,6 +186,10 @@
 				B03E2E7D182BB70000512113 /* NSImage+Additions.m */,
 				B078544E182E08E1004F370E /* RTFExporter.h */,
 				B078544F182E08E1004F370E /* RTFExporter.m */,
+				B0595183184B0F9800BF03A5 /* MyTextFieldCell.h */,
+				B0595184184B0F9800BF03A5 /* MyTextFieldCell.m */,
+				B059518C184B148700BF03A5 /* MyTableView.h */,
+				B059518D184B148700BF03A5 /* MyTableView.m */,
 			);
 			name = Helper;
 			sourceTree = "<group>";
@@ -181,6 +197,7 @@
 		B05FFF6C182D353B00E9E438 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				B059518F184B3F8F00BF03A5 /* icon.icns */,
 				B05FFF6D182D353B00E9E438 /* ListDoc.icns */,
 			);
 			path = Images;
@@ -233,6 +250,9 @@
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = Mirroon;
 				TargetAttributes = {
+					B035028E1828E54900C83A9F = {
+						DevelopmentTeam = 5P53L826DX;
+					};
 					B03502B21828E54A00C83A9F = {
 						TestTargetID = B035028E1828E54900C83A9F;
 					};
@@ -263,6 +283,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B03502A91828E54900C83A9F /* Document.xib in Resources */,
+				B0595190184B3F8F00BF03A5 /* icon.icns in Resources */,
 				B03502AE1828E54A00C83A9F /* Images.xcassets in Resources */,
 				B035029D1828E54900C83A9F /* InfoPlist.strings in Resources */,
 				B05FFF6E182D353B00E9E438 /* ListDoc.icns in Resources */,
@@ -288,8 +309,10 @@
 			files = (
 				B03502A61828E54900C83A9F /* Document.m in Sources */,
 				B0785450182E08E1004F370E /* RTFExporter.m in Sources */,
+				B0595185184B0F9800BF03A5 /* MyTextFieldCell.m in Sources */,
 				B03E2E7E182BB70000512113 /* NSImage+Additions.m in Sources */,
 				B035029F1828E54900C83A9F /* main.m in Sources */,
+				B059518E184B148700BF03A5 /* MyTableView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

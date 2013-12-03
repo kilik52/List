@@ -50,7 +50,7 @@ static NSInteger DocumentCurrentVersion = 1;
 
 + (BOOL)autosavesInPlace
 {
-    return YES;
+    return NO;
 }
 
 #pragma mark - Save & Load Document
@@ -267,6 +267,7 @@ static NSInteger DocumentCurrentVersion = 1;
         NSMutableDictionary *item = [self.items objectAtIndex:row];
         NSString *firstKey = [self.keys objectAtIndex:0];
         cellView.textField.stringValue = [item objectForKey:firstKey];
+        
         return cellView;
     }
     else if( [tableColumn.identifier isEqualToString:@"KeyColumn"] )
@@ -316,6 +317,7 @@ static NSInteger DocumentCurrentVersion = 1;
         [self.keyValueTableView reloadData];
     }
 }
+
 
 #pragma mark - NSTextFieldDelegate
 - (void)controlTextDidEndEditing:(NSNotification *)notification {
